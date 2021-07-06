@@ -33,6 +33,5 @@ class FileReadService
         }
 
         echo PHP_EOL;
-        return null;
     }
 }
