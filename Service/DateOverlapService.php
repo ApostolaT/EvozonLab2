@@ -45,6 +45,6 @@ class DateOverlapService
 
         return (int)$date[5] + (int)$date[4] * self::MINUTE + (int)$date[3] * self::HOUR +
             (int)$date[0] * self::DAY + (int)$date[1] * self::MONTH +
-            $date[2] * self::YEAR;
+            (int)$date[2] * self::YEAR;
     }
 }
