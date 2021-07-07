@@ -43,8 +43,8 @@ class DateOverlapService
     {
         $date = preg_split("/[\s,\D]+/", $date);
 
-        return (int)$date[5] + (int)$date[4] * self::MINUTE + (int)$date[3] * self::HOUR +
-            (int)$date[0] * self::DAY + (int)$date[1] * self::MONTH +
-            (int)$date[2] * self::YEAR;
+        return  (int)$date[5] + (int)$date[4] * self::MINUTE +
+                (int)$date[3] * self::HOUR + (int)$date[0] * self::DAY +
+                (int)$date[1] * self::MONTH + (int)$date[2] * self::YEAR;
     }
 }
