@@ -6,13 +6,13 @@ class FileReadService
     public function readNumbersFromFile(String $fileName) {
         if (!file_exists($fileName)) {
             echo 'File does not exist' . PHP_EOL;
-            return null;
+            return;
         }
 
         $file = fopen($fileName, "r");
         if (!$file) {
             echo 'File could not be opened' . PHP_EOL;
-            return null;
+            return;
         }
 
         $holder = 0b0000000000;

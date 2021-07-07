@@ -3,6 +3,11 @@
 
 class DateOverlapService
 {
+    private const MINUTE = 60;
+    private const HOUR = 3600;
+    private const DAY = 86400;
+    private const MONTH = 2592000;
+    private const YEAR = 31536000;
     /**
      * Returns true if the time periods overlap and false otherwise.
      * @param string $startDate1
@@ -38,8 +43,8 @@ class DateOverlapService
     {
         $date = preg_split("/[\s,\D]+/", $date);
 
-        return (int)$date[5] + (int)$date[4] * 60 + (int)$date[3] * 60 * 60 +
-            (int)$date[0] * 24 * 60 * 60 + (int)$date[1] * 30 * 24 * 60 * 60 +
-            $date[2] * 24 * 60 * 60 * 365;
+        return (int)$date[5] + (int)$date[4] * self::MINUTE + (int)$date[3] * self::HOUR +
+            (int)$date[0] * self::DAY + (int)$date[1] * self::MONTH +
+            $date[2] * self::YEAR;
     }
 }
