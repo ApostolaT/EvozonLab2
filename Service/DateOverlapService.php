@@ -3,6 +3,7 @@
 
 class DateOverlapService
 {
+    // Time in seconds for every date format
     private const MINUTE = 60;
     private const HOUR = 3600;
     private const DAY = 86400;
