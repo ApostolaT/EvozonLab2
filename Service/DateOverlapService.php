@@ -64,10 +64,10 @@ class DateOverlapService
     {
         //Optimized the final result by extracting from it the smallest Year from all the dates;
         // This is a safety measure to not go over the PHP_INT_MAX
-        $optimizedYear = self::YEAR * ($date[2] - $this->smallestYear);
+        $date[2] = $date[2] - $this->smallestYear;
 
         return  $date[5] + $date[4] * self::MINUTE +
                 $date[3] * self::HOUR + $date[0] * self::DAY +
-                $date[1] * self::MONTH + $optimizedYear;
+                $date[1] * self::MONTH + $date[2] * self::YEAR;
     }
 }
