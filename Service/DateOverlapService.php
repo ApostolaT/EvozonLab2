@@ -9,6 +9,12 @@ class DateOverlapService
     private const DAY = 86400;
     private const MONTH = 2592000;
     private const YEAR = 31536000;
+    private int $smallestYear;
+
+    public function __construct() {
+        $this->smallestYear = 0;
+    }
+
     /**
      * Returns true if the time periods overlap and false otherwise.
      * @param string $startDate1
@@ -16,6 +22,7 @@ class DateOverlapService
      * @param string $endDate1
      * @param string $endDate2
      * @return bool
+     * @throws Exception
      */
     public function checkOverlap(
         string $startDate1,
@@ -23,6 +30,16 @@ class DateOverlapService
         string $endDate1,
         string $endDate2
     ):bool {
+        $startDate1 = $this->extractToArray($startDate1);
+        $startDate2 = $this->extractToArray($startDate2);
+        $endDate1 = $this->extractToArray($endDate1);
+        $endDate2 = $this->extractToArray($endDate2);
+
+        if ((int)$startDate1[2] > (int)$endDate1[2]) throw new Exception("End date is smaller than the start date!");
+        if ((int)$startDate2[2] > (int)$endDate2[2]) throw new Exception("End date is smaller than the start date!");
+
+        $this->smallestYear = max((int)$startDate1[2], (int)$startDate2[2]);
+
         $startDate1 = $this->convertToSeconds($startDate1);
         $startDate2 = $this->convertToSeconds($startDate2);
         $endDate1 = $this->convertToSeconds($endDate1);
@@ -31,21 +48,26 @@ class DateOverlapService
         $dateArray = [$startDate1, $startDate2, $endDate1, $endDate2];
         sort($dateArray);
 
-        if (
-        ($dateArray[0] == $startDate1 && $dateArray[1] == $endDate1) ||
-        ($dateArray[0] == $startDate2 && $dateArray[1] == $endDate2)) {
+        if (($dateArray[0] == $startDate1 && $dateArray[1] == $endDate1) ||
+            ($dateArray[0] == $startDate2 && $dateArray[1] == $endDate2)) {
             return false;
         }
 
         return true;
     }
 
-    private function convertToSeconds(string $date): int
-    {
-        $date = preg_split("/[\s,\D]+/", $date);
+    private function extractToArray(string $date): array {
+        return preg_split("/[\s,\D]+/", $date);
+    }
 
-        return  (int)$date[5] + (int)$date[4] * self::MINUTE +
-                (int)$date[3] * self::HOUR + (int)$date[0] * self::DAY +
-                (int)$date[1] * self::MONTH + (int)$date[2] * self::YEAR;
+    private function convertToSeconds(array $date): int
+    {
+        //Optimized the final result by extracting from it the smallest Year from all the dates;
+        // This is a safety measure to not go over the PHP_INT_MAX
+        $optimizedYear = self::YEAR * ($date[2] - $this->smallestYear);
+
+        return  $date[5] + $date[4] * self::MINUTE +
+                $date[3] * self::HOUR + $date[0] * self::DAY +
+                $date[1] * self::MONTH + $optimizedYear;
     }
 }
