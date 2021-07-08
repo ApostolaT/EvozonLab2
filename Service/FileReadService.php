@@ -19,11 +19,11 @@ class FileReadService
         while(!feof($file)) {
             $digit = fgetc($file);
 
-            if ($digit == ' ') {
+            if ($digit == ' ' || feof($file)) {
                 continue;
             }
 
-            $holder = $holder | (0b0000000001 << $digit);
+            $holder |= (0b0000000001 << (int)$digit);
         }
 
         for ($i = 0; $i < 10; $i++) {
